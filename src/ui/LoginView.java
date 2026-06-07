@@ -7,6 +7,8 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import model.User;
@@ -46,9 +48,14 @@ public class LoginView {
             stage.setScene(new ProductView(guest).createScene(stage));
         });
 
-        root.getChildren().addAll(title, login, password, loginBtn, guestBtn);
+        ImageView logo = new ImageView(new Image("/Icon.JPG"));
+        logo.setFitWidth(80);
+        logo.setFitHeight(40);
+        logo.setPreserveRatio(true);
 
-        return new Scene(root, 300, 200);
+        root.getChildren().addAll(logo, title, login, password, loginBtn, guestBtn);
+
+        return new Scene(root, 400, 300);
     }
 
 }
