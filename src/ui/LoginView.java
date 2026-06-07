@@ -19,6 +19,8 @@ public class LoginView {
 
     public Scene createScene(Stage stage) {
         VBox root = new VBox(10);
+        root.setStyle("-fx-font-family: 'Times New Roman'; -fx-background-color: #FFFFFF;");
+
         root.setPadding(new Insets(20));
         Label title = new Label("Авторизация");
 
@@ -30,6 +32,8 @@ public class LoginView {
 
         Button loginBtn = new Button("Войти");
         Button guestBtn = new Button("Войти как гость");
+
+        loginBtn.setStyle("-fx-background-color: #00FA9A;");
 
         loginBtn.setOnAction(event -> {
             var user = userDao.getUserByLoginAndPassword(login.getText(), password.getText());

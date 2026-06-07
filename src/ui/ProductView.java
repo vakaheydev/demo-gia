@@ -36,6 +36,7 @@ public class ProductView {
     public Scene createScene(Stage stage) {
         BorderPane root = new BorderPane();
         root.setPadding(new Insets(20));
+        root.setStyle("-fx-font-family: 'Times New Roman'; -fx-background-color: #FFFFFF;");
 
         table = createTable();
         HBox top = createTopPanel(stage);

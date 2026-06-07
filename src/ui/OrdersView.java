@@ -34,6 +34,8 @@ public class OrdersView {
         BorderPane borderPane = new BorderPane();
         borderPane.setPadding(new Insets(20));
 
+        borderPane.setStyle("-fx-font-family: 'Times New Roman'; -fx-background-color: #FFFFFF;");
+
         borderPane.setTop(createTop(stage));
         borderPane.setCenter(createTable());
         borderPane.setBottom(createBottom(stage));
@@ -50,6 +52,9 @@ public class OrdersView {
     public HBox createTop(Stage stage) {
         HBox root = new HBox(10);
         Label userLabel = new Label("Пользователь " + user.getFio());
+
+        root.setStyle("-fx-background-color: #7FFF00;");
+
 
         Button logoutBtn = new Button("Выйти");
         Button productsBtn = new Button("Товары");
