@@ -13,6 +13,7 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.Region;
+import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import model.Order;
 import model.User;
@@ -37,8 +38,12 @@ public class OrdersView {
         root.setPadding(new Insets(20));
         root.setStyle("-fx-font-family: '" + AppConfig.FONT_FAMILY + "'; -fx-background-color: " + AppConfig.BACKGROUND_COLOR + ";");
 
+        Label title = new Label("Заказы");
+        title.setStyle("-fx-font-size: 16; -fx-font-weight: bold;");
+
         table = createTable();
-        root.setTop(createTopPanel(stage));
+        VBox top = new VBox(createTopPanel(stage), title);
+        root.setTop(top);
         root.setCenter(table);
         root.setBottom(createBottomPanel());
 
