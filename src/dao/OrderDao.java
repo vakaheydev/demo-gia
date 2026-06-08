@@ -13,16 +13,12 @@ public class OrderDao {
     private final DictionaryDao dict = new DictionaryDao();
 
     public boolean hasProductInOrder(String articul) {
-        String sql = "SELECT COUNT(*) FROM orders WHERE articul = ?";
-        try (var con = DatabaseConnection.getConnection();
-             var ps = con.prepareStatement(sql)) {
-            ps.setString(1, articul);
-            try (var rs = ps.executeQuery()) {
-                return rs.next() && rs.getInt(1) > 0;
+        for (Order order : findAll()) {
+            if (order.getArticul().contains(articul)) {
+                return true;
             }
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
         }
+        return false;
     }
 
     public void create(Order order) {
