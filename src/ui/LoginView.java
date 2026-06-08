@@ -21,7 +21,7 @@ public class LoginView {
         root.setStyle("-fx-font-family: '" + AppConfig.FONT_FAMILY + "'; -fx-background-color: " + AppConfig.BACKGROUND_COLOR + ";");
         root.setPadding(new Insets(20));
 
-        ImageView logo = new ImageView(new Image("/Icon.JPG"));
+        ImageView logo = new ImageView(new Image(AppConfig.LOGO_PATH));
         logo.setFitWidth(80);
         logo.setFitHeight(40);
         logo.setPreserveRatio(true);

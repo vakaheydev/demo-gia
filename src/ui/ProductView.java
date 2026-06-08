@@ -244,6 +244,7 @@ public class ProductView {
                 return;
             }
             productDao.deleteById(selected.getId());
+            ImageUtils.deleteFile(selected.getPhotoPath());
             Alerts.info("Товар успешно удалён");
             loadProducts();
         });

@@ -10,7 +10,7 @@ public class MainApp extends Application {
     @Override
     public void start(Stage stage) throws Exception {
         stage.setTitle(AppConfig.APP_TITLE);
-        stage.getIcons().add(new Image("/Icon.JPG"));
+        stage.getIcons().add(new Image(AppConfig.LOGO_PATH));
         stage.setScene(new LoginView().createScene(stage));
         stage.show();
     }

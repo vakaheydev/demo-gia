@@ -18,6 +18,9 @@ public class AppConfig {
     public static final String ROLE_ADMIN = "Администратор";
     public static final String ROLE_MANAGER = "Менеджер";
 
+    // Логотип приложения (classpath-ресурс)
+    public static final String LOGO_PATH = "/Icon.JPG";
+
     // Изображения
     public static final String IMAGES_DIR = "images";
     public static final String PLACEHOLDER_FILENAME = "picture.png";
