@@ -35,7 +35,7 @@ public class LoginView {
         passwordField.setPromptText("Введите пароль");
 
         Button loginBtn = new Button("Войти");
-        loginBtn.setStyle("-fx-background-color: " + AppConfig.LOGIN_BTN_COLOR + ";");
+        loginBtn.setStyle("-fx-background-color: " + AppConfig.COLOR_ACCENT + ";");
 
         Button guestBtn = new Button("Войти как гость");
 

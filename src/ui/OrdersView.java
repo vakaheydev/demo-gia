@@ -65,7 +65,7 @@ public class OrdersView {
 
         HBox top = new HBox(10, productsBtn, spacer, userLabel, logoutBtn);
         top.setAlignment(Pos.CENTER_LEFT);
-        top.setStyle("-fx-background-color: " + AppConfig.TOP_BAR_COLOR + ";");
+        top.setStyle("-fx-background-color: " + AppConfig.COLOR_SECONDARY_BG + ";");
         top.setPadding(new Insets(6));
         return top;
     }

@@ -34,7 +34,7 @@ public class AppConfig {
     public static final String HIGH_SALE_COLOR = "#2E8B57";
     public static final String OUT_OF_STOCK_COLOR = "lightblue"; // количество = 0 → голубой фон
 
-    // Цвета UI
-    public static final String LOGIN_BTN_COLOR = "#00FA9A";
-    public static final String TOP_BAR_COLOR = "#7FFF00";
+    // Цвета UI (из руководства по стилю, Приложение 3)
+    public static final String COLOR_SECONDARY_BG = "#7FFF00"; // дополнительный фон
+    public static final String COLOR_ACCENT = "#00FA9A";       // акцент на целевом действии
 }
