@@ -4,6 +4,7 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
 
 public class Alerts {
+
     public static void error(String message) {
         Alert alert = new Alert(Alert.AlertType.ERROR);
         alert.setTitle("Ошибка");
@@ -21,11 +22,10 @@ public class Alerts {
     }
 
     public static boolean confirm(String message) {
-        Alert alert = new Alert(Alert.AlertType.INFORMATION);
-        alert.setTitle("Информация");
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        alert.setTitle("Подтверждение");
         alert.setHeaderText(null);
         alert.setContentText(message);
-
         return alert.showAndWait()
                 .filter(btn -> btn == ButtonType.OK)
                 .isPresent();

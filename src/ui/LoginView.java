@@ -1,12 +1,10 @@
 package ui;
 
+import config.AppConfig;
 import dao.UserDao;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.PasswordField;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.VBox;
@@ -15,51 +13,47 @@ import model.User;
 import utils.Alerts;
 
 public class LoginView {
+
     private final UserDao userDao = new UserDao();
 
     public Scene createScene(Stage stage) {
         VBox root = new VBox(10);
-        root.setStyle("-fx-font-family: 'Times New Roman'; -fx-background-color: #FFFFFF;");
-
+        root.setStyle("-fx-font-family: '" + AppConfig.FONT_FAMILY + "'; -fx-background-color: " + AppConfig.BACKGROUND_COLOR + ";");
         root.setPadding(new Insets(20));
-        Label title = new Label("Авторизация");
 
-        TextField login = new TextField();
-        login.setPromptText("Введите логин");
-
-        PasswordField password = new PasswordField();
-        password.setPromptText("Введите пароль");
-
-        Button loginBtn = new Button("Войти");
-        Button guestBtn = new Button("Войти как гость");
-
-        loginBtn.setStyle("-fx-background-color: #00FA9A;");
-
-        loginBtn.setOnAction(event -> {
-            var user = userDao.getUserByLoginAndPassword(login.getText(), password.getText());
-            if (user == null) {
-                Alerts.error("Неверный логин и / или пароль");
-                return;
-            }
-
-            System.out.println("Авторизация прошла успешно");
-            stage.setScene(new ProductView(user).createScene(stage));
-        });
-
-        guestBtn.setOnAction(event -> {
-            System.out.println("Авторизация прошла успешно");
-            User guest = new User(0, "Гость", "Гость", "Гость", "Гость");
-            stage.setScene(new ProductView(guest).createScene(stage));
-        });
-
-        ImageView logo = new ImageView(new Image("/Icon.JPG"));
+        ImageView logo = new ImageView(new Image(AppConfig.LOGO_PATH));
         logo.setFitWidth(80);
         logo.setFitHeight(40);
         logo.setPreserveRatio(true);
 
-        root.getChildren().addAll(logo, title, login, password, loginBtn, guestBtn);
+        Label title = new Label("Авторизация");
 
+        TextField loginField = new TextField();
+        loginField.setPromptText("Введите логин");
+
+        PasswordField passwordField = new PasswordField();
+        passwordField.setPromptText("Введите пароль");
+
+        Button loginBtn = new Button("Войти");
+        loginBtn.setStyle("-fx-background-color: " + AppConfig.COLOR_ACCENT + ";");
+
+        Button guestBtn = new Button("Войти как гость");
+
+        loginBtn.setOnAction(event -> {
+            User user = userDao.getUserByLoginAndPassword(loginField.getText(), passwordField.getText());
+            if (user == null) {
+                Alerts.error("Неверный логин и / или пароль");
+                return;
+            }
+            stage.setScene(new ProductView(user).createScene(stage));
+        });
+
+        guestBtn.setOnAction(event -> {
+            User guest = new User(0, "Гость", "", "Гость", "Гость");
+            stage.setScene(new ProductView(guest).createScene(stage));
+        });
+
+        root.getChildren().addAll(logo, title, loginField, passwordField, loginBtn, guestBtn);
         return new Scene(root, 400, 300);
     }
-
 }

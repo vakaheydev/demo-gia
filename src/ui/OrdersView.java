@@ -1,47 +1,54 @@
 package ui;
 
+import config.AppConfig;
 import dao.OrderDao;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
+import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.Priority;
+import javafx.scene.layout.Region;
+import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import model.Order;
-import model.Product;
 import model.User;
 import utils.Alerts;
 
 import java.time.LocalDate;
 
 public class OrdersView {
+
     private final User user;
-    private ObservableList<Order> orders;
     private final OrderDao orderDao = new OrderDao();
+
     private TableView<Order> table;
+    private ObservableList<Order> orders;
 
     public OrdersView(User user) {
         this.user = user;
     }
 
     public Scene createScene(Stage stage) {
-        BorderPane borderPane = new BorderPane();
-        borderPane.setPadding(new Insets(20));
+        BorderPane root = new BorderPane();
+        root.setPadding(new Insets(20));
+        root.setStyle("-fx-font-family: '" + AppConfig.FONT_FAMILY + "'; -fx-background-color: " + AppConfig.BACKGROUND_COLOR + ";");
 
-        borderPane.setStyle("-fx-font-family: 'Times New Roman'; -fx-background-color: #FFFFFF;");
+        Label title = new Label("Заказы");
+        title.setStyle("-fx-font-size: 16; -fx-font-weight: bold;");
 
-        borderPane.setTop(createTop(stage));
-        borderPane.setCenter(createTable());
-        borderPane.setBottom(createBottom(stage));
+        table = createTable();
+        VBox top = new VBox(createTopPanel(stage), title);
+        root.setTop(top);
+        root.setCenter(table);
+        root.setBottom(createBottomPanel());
 
         loadOrders();
-        return new Scene(borderPane, 1200, 600);
+        return new Scene(root, 1200, 600);
     }
 
     private void loadOrders() {
@@ -49,38 +56,35 @@ public class OrdersView {
         table.setItems(orders);
     }
 
-    public HBox createTop(Stage stage) {
-        HBox root = new HBox(10);
-        Label userLabel = new Label("Пользователь " + user.getFio());
+    private HBox createTopPanel(Stage stage) {
+        Region spacer = new Region();
+        HBox.setHgrow(spacer, Priority.ALWAYS);
 
-        root.setStyle("-fx-background-color: #7FFF00;");
-
+        Label userLabel = new Label(user.getFio());
 
         Button logoutBtn = new Button("Выйти");
         Button productsBtn = new Button("Товары");
 
-        logoutBtn.setOnAction(event -> {
-            stage.setScene(new LoginView().createScene(stage));
-        });
+        logoutBtn.setOnAction(e -> stage.setScene(new LoginView().createScene(stage)));
+        productsBtn.setOnAction(e -> stage.setScene(new ProductView(user).createScene(stage)));
 
-        productsBtn.setOnAction(event -> {
-            stage.setScene(new ProductView(user).createScene(stage));
-        });
-
-        root.getChildren().addAll(
-                userLabel, logoutBtn, productsBtn
-        );
-
-        return root;
+        HBox top = new HBox(10, productsBtn, spacer, userLabel, logoutBtn);
+        top.setAlignment(Pos.CENTER_LEFT);
+        top.setStyle("-fx-background-color: " + AppConfig.COLOR_SECONDARY_BG + ";");
+        top.setPadding(new Insets(6));
+        return top;
     }
 
-    public HBox createBottom(Stage stage) {
-        HBox root = new HBox(10);
+    private HBox createBottomPanel() {
         Button addBtn = new Button("Добавить заказ");
         Button editBtn = new Button("Изменить заказ");
         Button deleteBtn = new Button("Удалить заказ");
 
-        addBtn.setOnAction(event -> {
+        addBtn.setVisible(isAdmin());
+        editBtn.setVisible(isAdmin());
+        deleteBtn.setVisible(isAdmin());
+
+        addBtn.setOnAction(e -> {
             Order order = new OrderForm(null, user).showAndWait();
             if (order != null) {
                 orderDao.create(order);
@@ -89,93 +93,73 @@ public class OrdersView {
             }
         });
 
-        editBtn.setOnAction(event -> {
+        editBtn.setOnAction(e -> {
             Order selected = table.getSelectionModel().getSelectedItem();
             if (selected == null) {
+                Alerts.error("Выберите заказ для редактирования");
                 return;
             }
-
             Order order = new OrderForm(selected, user).showAndWait();
             if (order != null) {
                 orderDao.update(order);
-                Alerts.info("Заказ успешно обновлен");
+                Alerts.info("Заказ успешно обновлён");
                 loadOrders();
             }
         });
 
-        deleteBtn.setOnAction(event -> {
+        deleteBtn.setOnAction(e -> {
             Order selected = table.getSelectionModel().getSelectedItem();
-
             if (selected == null) {
+                Alerts.error("Выберите заказ для удаления");
                 return;
             }
-
-            if (!Alerts.confirm("Подтвердите удаление заказа id=" + selected.getId())) {
+            if (!Alerts.confirm("Удалить заказ #" + selected.getId() + "?")) {
                 return;
             }
-
             orderDao.deleteById(selected.getId());
-            Alerts.info("Заказ успешно удален");
+            Alerts.info("Заказ успешно удалён");
             loadOrders();
         });
 
-        root.getChildren().addAll(
-                addBtn, editBtn, deleteBtn
-        );
-
-        addBtn.setVisible(isAdmin());
-        editBtn.setVisible(isAdmin());
-        deleteBtn.setVisible(isAdmin());
-
-        return root;
+        HBox bottom = new HBox(10, addBtn, editBtn, deleteBtn);
+        bottom.setPadding(new Insets(10, 0, 0, 0));
+        return bottom;
     }
 
-    public boolean isAdmin() {
-        return user.getRole().equalsIgnoreCase("администратор");
+    private TableView<Order> createTable() {
+        TableView<Order> t = new TableView<>();
+
+        TableColumn<Order, Integer> idCol = new TableColumn<>("ID");
+        idCol.setCellValueFactory(new PropertyValueFactory<>("id"));
+
+        TableColumn<Order, String> articulCol = new TableColumn<>("Артикул");
+        articulCol.setCellValueFactory(new PropertyValueFactory<>("articul"));
+
+        TableColumn<Order, LocalDate> orderDateCol = new TableColumn<>("Дата заказа");
+        orderDateCol.setCellValueFactory(new PropertyValueFactory<>("orderDate"));
+
+        TableColumn<Order, LocalDate> deliveryDateCol = new TableColumn<>("Дата выдачи");
+        deliveryDateCol.setCellValueFactory(new PropertyValueFactory<>("deliveryDate"));
+
+        TableColumn<Order, String> pickupCol = new TableColumn<>("Адрес пункта выдачи");
+        pickupCol.setCellValueFactory(new PropertyValueFactory<>("pickupPoint"));
+        pickupCol.setPrefWidth(200);
+
+        TableColumn<Order, String> clientCol = new TableColumn<>("ФИО клиента");
+        clientCol.setCellValueFactory(new PropertyValueFactory<>("clientFio"));
+
+        TableColumn<Order, Integer> codeCol = new TableColumn<>("Код получения");
+        codeCol.setCellValueFactory(new PropertyValueFactory<>("code"));
+
+        TableColumn<Order, String> statusCol = new TableColumn<>("Статус заказа");
+        statusCol.setCellValueFactory(new PropertyValueFactory<>("status"));
+
+        t.getColumns().addAll(idCol, articulCol, orderDateCol, deliveryDateCol,
+                pickupCol, clientCol, codeCol, statusCol);
+        return t;
     }
 
-    public boolean isManager() {
-        return user.getRole().equalsIgnoreCase("Менеджер");
-    }
-
-    public TableView<Order> createTable() {
-        table = new TableView<>();
-
-        TableColumn<Order, Integer> id = new TableColumn<>("ID");
-        id.setCellValueFactory(new PropertyValueFactory<>("id"));
-
-        TableColumn<Order, String> articul = new TableColumn<>("Артикул");
-        articul.setCellValueFactory(new PropertyValueFactory<>("articul"));
-
-        TableColumn<Order, LocalDate> orderDate = new TableColumn<>("Дата заказа");
-        orderDate.setCellValueFactory(new PropertyValueFactory<>("orderDate"));
-
-        TableColumn<Order, LocalDate> deliveryDate = new TableColumn<>("Дата доставки");
-        deliveryDate.setCellValueFactory(new PropertyValueFactory<>("deliveryDate"));
-
-        TableColumn<Order, String> pickupPoint = new TableColumn<>("Адрес пункта выдачи");
-        pickupPoint.setCellValueFactory(new PropertyValueFactory<>("pickupPoint"));
-
-        TableColumn<Order, String> clientFio = new TableColumn<>("ФИО клиента");
-        clientFio.setCellValueFactory(new PropertyValueFactory<>("clientFio"));
-
-        TableColumn<Order, Integer> code = new TableColumn<>("Код для получения");
-        code.setCellValueFactory(new PropertyValueFactory<>("code"));
-
-        TableColumn<Order, Integer> status = new TableColumn<>("Статус заказа");
-        status.setCellValueFactory(new PropertyValueFactory<>("status"));
-
-        table.getColumns().addAll(
-                id,
-                articul,
-                orderDate,
-                deliveryDate,
-                pickupPoint,
-                clientFio,
-                code,
-                status
-        );
-
-        return table;
+    private boolean isAdmin() {
+        return user.getRole().equalsIgnoreCase(AppConfig.ROLE_ADMIN);
     }
 }
