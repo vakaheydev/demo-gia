@@ -14,25 +14,25 @@ public class AppConfig {
     public static final String DB_USER = "postgres";
     public static final String DB_PASSWORD = "123";
 
-    // Роли пользователей
+    // Роли пользователей (должны совпадать со значениями в таблице roles)
     public static final String ROLE_ADMIN = "Администратор";
     public static final String ROLE_MANAGER = "Менеджер";
 
     // Логотип приложения (classpath-ресурс)
     public static final String LOGO_PATH = "/Icon.JPG";
 
-    // Изображения
-    public static final String IMAGES_DIR = "images";
-    public static final String PLACEHOLDER_FILENAME = "picture.png";
-    public static final int PHOTO_WIDTH = 300;
+    // Изображения товаров
+    public static final String IMAGES_DIR = "images"; // папка рядом с jar, куда сохраняются фото
+    public static final String PLACEHOLDER_FILENAME = "picture.png"; // заглушка, если у товара нет фото
+    public static final int PHOTO_WIDTH = 300;  // максимальный размер при сохранении (требование: 300×200)
     public static final int PHOTO_HEIGHT = 200;
-    public static final int TABLE_PHOTO_WIDTH = 75;
+    public static final int TABLE_PHOTO_WIDTH = 75;  // размер превью в колонке таблицы
     public static final int TABLE_PHOTO_HEIGHT = 50;
 
-    // Цвета подсветки строк
-    public static final int HIGH_SALE_THRESHOLD = 15;
+    // Подсветка строк таблицы товаров
+    public static final int HIGH_SALE_THRESHOLD = 15; // скидка > 15% → зелёный фон
     public static final String HIGH_SALE_COLOR = "#2E8B57";
-    public static final String OUT_OF_STOCK_COLOR = "lightblue";
+    public static final String OUT_OF_STOCK_COLOR = "lightblue"; // количество = 0 → голубой фон
 
     // Цвета UI
     public static final String LOGIN_BTN_COLOR = "#00FA9A";
