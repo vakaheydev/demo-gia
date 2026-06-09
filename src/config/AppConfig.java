@@ -6,7 +6,7 @@ public class AppConfig {
 
     // Приложение
     public static final String APP_TITLE = "Обувь";
-    public static final String FONT_FAMILY = "Times New Roman";
+    public static final String FONT_FAMILY = "Calibri";
     public static final String BACKGROUND_COLOR = "#FFFFFF";
 
     // База данных
@@ -30,11 +30,11 @@ public class AppConfig {
     public static final int TABLE_PHOTO_HEIGHT = 50;
 
     // Подсветка строк таблицы товаров
-    public static final int HIGH_SALE_THRESHOLD = 15; // скидка > 15% → зелёный фон
-    public static final String HIGH_SALE_COLOR = "#2E8B57";
+    public static final int HIGH_SALE_THRESHOLD = 12; // скидка > 12% → фон #F4A460
+    public static final String HIGH_SALE_COLOR = "#F4A460";
     public static final String OUT_OF_STOCK_COLOR = "lightblue"; // количество = 0 → голубой фон
 
     // Цвета UI (из руководства по стилю, Приложение 3)
-    public static final String COLOR_SECONDARY_BG = "#7FFF00"; // дополнительный фон
-    public static final String COLOR_ACCENT = "#00FA9A";       // акцент на целевом действии
+    public static final String COLOR_SECONDARY_BG = "#DAA520"; // дополнительный фон
+    public static final String COLOR_ACCENT = "#B8860B";       // акцент на целевом действии
 }
