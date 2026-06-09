@@ -14,6 +14,8 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.stage.Stage;
 import model.Order;
 import model.User;
@@ -57,6 +59,11 @@ public class OrdersView {
     }
 
     private HBox createTopPanel(Stage stage) {
+        ImageView logo = new ImageView(new Image(AppConfig.LOGO_PATH));
+        logo.setFitWidth(80);
+        logo.setFitHeight(40);
+        logo.setPreserveRatio(true);
+
         Region spacer = new Region();
         HBox.setHgrow(spacer, Priority.ALWAYS);
 
@@ -68,7 +75,7 @@ public class OrdersView {
         logoutBtn.setOnAction(e -> stage.setScene(new LoginView().createScene(stage)));
         productsBtn.setOnAction(e -> stage.setScene(new ProductView(user).createScene(stage)));
 
-        HBox top = new HBox(10, productsBtn, spacer, userLabel, logoutBtn);
+        HBox top = new HBox(10, logo, productsBtn, spacer, userLabel, logoutBtn);
         top.setAlignment(Pos.CENTER_LEFT);
         top.setStyle("-fx-background-color: " + AppConfig.COLOR_SECONDARY_BG + ";");
         top.setPadding(new Insets(6));

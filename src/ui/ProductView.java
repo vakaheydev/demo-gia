@@ -13,6 +13,7 @@ import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
@@ -192,12 +193,16 @@ public class ProductView {
         logoutBtn.setOnAction(e -> stage.setScene(new LoginView().createScene(stage)));
         ordersBtn.setOnAction(e -> stage.setScene(new OrdersView(user).createScene(stage)));
 
-        // ФИО пользователя — в правом верхнем углу
+        ImageView logo = new ImageView(new Image(AppConfig.LOGO_PATH));
+        logo.setFitWidth(80);
+        logo.setFitHeight(40);
+        logo.setPreserveRatio(true);
+
         Region spacer = new Region();
         HBox.setHgrow(spacer, Priority.ALWAYS);
         Label userLabel = new Label(user.getFio());
 
-        HBox top = new HBox(10, searchField, supplierBox, ordersBtn, spacer, userLabel, logoutBtn);
+        HBox top = new HBox(10, logo, searchField, supplierBox, ordersBtn, spacer, userLabel, logoutBtn);
         top.setAlignment(Pos.CENTER_LEFT);
         top.setStyle("-fx-background-color: " + AppConfig.COLOR_SECONDARY_BG + ";");
         top.setPadding(new Insets(6, 6, 6, 6));

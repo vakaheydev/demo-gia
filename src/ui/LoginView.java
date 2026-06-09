@@ -27,6 +27,7 @@ public class LoginView {
         logo.setPreserveRatio(true);
 
         Label title = new Label("Авторизация");
+        title.setStyle("-fx-font-size: 16; -fx-font-weight: bold;");
 
         TextField loginField = new TextField();
         loginField.setPromptText("Введите логин");
